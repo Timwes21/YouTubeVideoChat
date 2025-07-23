@@ -1,0 +1,55 @@
+.sidebar{
+  width: 300px;
+  /* position: absolute; */
+  /* left: 0; */
+  /* top: 0; */
+  background-color: grey;
+  height: 100vh;
+}
+.sidebar ul{
+    list-style: none;
+}
+.sidebar ul li{
+    text-align: left;
+    padding: 10px;
+    font-size: 1.5em;
+}
+.contents{
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    /* background-color: aliceblue; */
+    padding: 0;
+    margin: 0;
+}
+#save-content{
+    text-decoration: underline;
+    font-style: italic;
+    cursor: pointer;
+}
+.contents p{
+    /* background-color: aliceblue; */
+    margin: 0;
+    padding: 0;
+}
+.tabs ul li{
+    cursor: pointer;
+}
+.base-contents{
+    display: flex;
+    flex-direction: column;
+    max-width: fit-content;
+}
+.tabs ul div div{
+    display: flex;
+}
+.tabs-header{
+    font-weight: bold;
+}
+.item{
+    font-weight: bold;
+}
+.contents hr{
+    width: 80%;
+    box-shadow: 0px 0px 10  px black;
+}
