@@ -71,6 +71,7 @@ func main() {
 				"error": "Username Already Exists",
 			})
 			fmt.Println("username is taken")
+			fmt.Println("username is taken")
 			return
 		}
 
