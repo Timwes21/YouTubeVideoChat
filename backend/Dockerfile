@@ -11,7 +11,5 @@ RUN go build -o app
 RUN ls -l /app
 
 
-ENV PORT=8080
-EXPOSE 8080
 
 CMD ["app"]
