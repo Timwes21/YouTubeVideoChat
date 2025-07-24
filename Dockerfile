@@ -1,14 +1,15 @@
 FROM golang:1.24
 
-WORKDIR /app
+WORKDIR backend/app
 
 COPY backend/go.mod backend/go.sum ./
 RUN go mod download
 
 COPY backend/ ./
 
-RUN go build -o app || (echo "Build failed!" && exit 1)
-RUN chmod +x app
+RUN go build -o app
+RUN go run backend/main.go
+
 
 # Optional: Log files that exist
 RUN ls -l /app
