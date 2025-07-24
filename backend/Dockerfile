@@ -6,7 +6,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY backend ./
+COPY . .
 RUN go build -o app
 RUN ls -l /app
 
