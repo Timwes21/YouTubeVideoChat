@@ -3,10 +3,10 @@ FROM golang:1.24
 WORKDIR /app
 
 # pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
-COPY go.mod go.sum ./
+COPY backend ./go.mod go.sum ./
 RUN go mod download
 
-COPY . .
+COPY backend ./
 RUN go build -o app
 RUN ls -l /app
 
