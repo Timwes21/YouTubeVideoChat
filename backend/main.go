@@ -36,7 +36,7 @@ func main() {
 	password := getenv("PASSWORD")
 	dbname := getenv("DBNAME")
 	host := getenv("HOST")
-	port := getenv("PORT")
+	port := getenv("POSTGRESPORT")
 	fmt.Println(password)
 
 	connStr := fmt.Sprintf("user=postgres password=%s dbname=%s host=%s port=%s sslmode=disable", password, dbname, host, port)
