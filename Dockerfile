@@ -2,14 +2,16 @@ FROM golang:1.24
 
 WORKDIR /app
 
-# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
 COPY backend/go.mod backend/go.sum ./
 RUN go mod download
 
 COPY backend/ ./
-RUN go build -o app
+
+RUN go build -o app || (echo "Build failed!" && exit 1)
+RUN chmod +x app
+
+# Optional: Log files that exist
 RUN ls -l /app
 
-
-
+EXPOSE 8080
 CMD ["./app"]
