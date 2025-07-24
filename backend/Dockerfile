@@ -12,4 +12,4 @@ RUN go build -o app
 ENV PORT=8080
 EXPOSE 8080
 
-CMD go run main.go
+CMD ["app"]
