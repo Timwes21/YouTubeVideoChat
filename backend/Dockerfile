@@ -8,5 +8,7 @@ RUN go mod download
 
 COPY . .
 RUN go build -v -o /usr/local/bin/app ./...
+RUN echo "📁 Full directory tree:" && find . -type f
+
 
 CMD ["app"]
