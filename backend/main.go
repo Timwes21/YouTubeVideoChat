@@ -12,8 +12,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/joho/godotenv"
-
 	_ "github.com/lib/pq"
 )
 
@@ -32,7 +30,7 @@ func getenv(envName string) string {
 
 func main() {
 	fmt.Println("App is started")
-	godotenv.Load()
+	// godotenv.Load()
 	// user := getenv("USER")
 	password := getenv("PASSWORD")
 	dbname := getenv("DBNAME")
