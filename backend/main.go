@@ -125,7 +125,7 @@ func main() {
 		serverPort = "8080"
 	}
 
-	serverErr := http.ListenAndServe(":"+serverPort, nil)
+	serverErr := http.ListenAndServe(":8080", nil)
 	if serverErr != nil {
 		fmt.Println(serverErr)
 	}
