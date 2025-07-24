@@ -14,4 +14,5 @@ RUN chmod +x app
 RUN ls -l /app
 
 EXPOSE 8080
-CMD ["./app"]
+CMD ["sh", "-c", "echo 'starting container' && ls -l /app && ./app"]
+
