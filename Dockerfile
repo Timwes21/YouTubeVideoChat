@@ -12,4 +12,4 @@ RUN ls -l /app
 
 
 
-CMD ["app"]
+CMD ["./app"]
