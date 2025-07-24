@@ -36,10 +36,12 @@ func main() {
 	password := getenv("PASSWORD")
 	dbname := getenv("DBNAME")
 	host := getenv("HOST")
-	port := getenv("POSTGRESPORT")
+	postgresPort := getenv("POSTGRESPORT")
+	serverPort := getenv("PORT")
+
 	fmt.Println(password)
 
-	connStr := fmt.Sprintf("user=postgres password=%s dbname=%s host=%s port=%s sslmode=disable", password, dbname, host, port)
+	connStr := fmt.Sprintf("user=postgres password=%s dbname=%s host=%s port=%s sslmode=disable", password, dbname, host, postgresPort)
 	fmt.Println(connStr)
 	conn, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -119,6 +121,6 @@ func main() {
 		}
 
 	})
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":"+serverPort, nil)
 
 }
