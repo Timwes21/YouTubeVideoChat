@@ -1,12 +1,15 @@
 import "./styles/askNewVid.css";
-import SideBar from './components/sidebar';
-import AskNewVideo from './components/askNewVideo';
 import './styles/App.css';
 import './styles/askSource.css';
+import './styles/Login.css'
 import { RefreshContext } from "./contexts/RefreshContext";
 import { KnowledgeSourceContext } from "./contexts/knowledgeSource";
 import { useState } from "react";
-import AskSource from "./components/askSource";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Routes/Home.tsx";
+import Login from "./Routes/Login.tsx";
+import CreateAccount from "./Routes/CreateAccount.tsx";
+
 
 function App() {
   const [ refresh, setRefesh ] = useState<boolean>(false);  
@@ -18,14 +21,17 @@ function App() {
 
   return (
     <>
-      <RefreshContext.Provider value={[refresh, setRefesh]}>
-        <KnowledgeSourceContext.Provider value={[knowledgeSource, setKnowledgeSource]}>
-        <div className='home'>
-          <SideBar/>
-          {knowledgeSource[2] === "known" ? <AskSource titleContents={knowledgeSource[0]} type={knowledgeSource[1]}/>:<AskNewVideo/>}
-        </div>
-        </KnowledgeSourceContext.Provider>
-      </RefreshContext.Provider>
+      <BrowserRouter>
+        <RefreshContext.Provider value={[refresh, setRefesh]}>
+          <KnowledgeSourceContext.Provider value={[knowledgeSource, setKnowledgeSource]}>
+            <Routes>
+              <Route path="/" element={<Home/>}/>
+              <Route path="/login" element={<Login/>}/>
+              <Route path="/create-account" element={<CreateAccount/>}/>
+            </Routes>
+          </KnowledgeSourceContext.Provider>
+        </RefreshContext.Provider>
+      </BrowserRouter>
     </>
   )
 }

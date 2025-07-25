@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { RefreshContext } from "../contexts/RefreshContext";
 import { useContext } from "react";
 import { KnowledgeSourceContext } from "../contexts/knowledgeSource";
+import { getToken } from "../token";
+import { useNavigate, Link } from "react-router-dom";
+import { aiInfo, aiUpdate } from "../routes";
 
 export default function SideBar(){
     const [ refresh, setRefesh ] = useContext(RefreshContext);
@@ -17,9 +20,22 @@ export default function SideBar(){
     const [ bases, setBases ] = useState<string[]>([]);
     const [ vidoes, setVideos ] = useState<string[]>([]);
 
+    const [ loggedIn, setLoggedIn ] = useState<boolean | undefined>();
+    
+    useEffect(()=>{
+        const token: string = getToken();
+        if (token === ""){
+            setLoggedIn(false);
+        }
+        else {
+            setLoggedIn(true);
+        }
+    })
+    
+
 
     useEffect(()=>{
-        fetch("http://127.0.0.1:8000/get-knowledge-lists")
+        fetch(aiUpdate+"/get-knowledge-lists")
         .then(response=>response.json())
         .then(data=>{
             const { bases, videos } = data;
@@ -36,7 +52,7 @@ export default function SideBar(){
         if (base.length === 0){
             return 
         }
-        fetch("http://127.0.0.1:8000/create-base", {
+        fetch(aiUpdate + "/create-base", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({name : base})
@@ -68,7 +84,7 @@ export default function SideBar(){
         fetch("http://127.0.0.1:8000/save-url", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({url : url})
+            body: JSON.stringify({url})
         })
         .then(resopnse=>resopnse.json())
         .then(data=>{
@@ -95,22 +111,27 @@ export default function SideBar(){
     )
 
     const chooseVideo = (video: string, type: string) => () => {
-        fetch("http://127.0.0.1:8000/get-knowledge-source", {
+        fetch(aiInfo+"/get-knowledge-source", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({name: video, type: type})
         })
         setKnowledgeSource([ video, type, "known" ])
         console.log(video);
-        
-
     }
+
+    const loginChoice =(
+        <>
+            <p>Login to get Full Features <Link to="/login">Login</Link></p>
+        </>
+    )
 
 
 
     return (
         <div className="sidebar">
           <div className="tabs">
+            {loggedIn?
             <ul>
               <li className="tabs-header" onClick={()=>setShowBases(!showBases)}>Knowledge Bases</li>
               {showBases && 
@@ -134,7 +155,7 @@ export default function SideBar(){
                 </ul>
                 }
               {vidoes.length > 0 &&<li onClick={chooseVideo("hive", "hive")} className="tabs-header">Hive</li>}
-            </ul>
+            </ul>: loginChoice}
           </div>
         </div>
     )

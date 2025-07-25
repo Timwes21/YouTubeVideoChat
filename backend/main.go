@@ -12,6 +12,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/rs/cors"
+
 	_ "github.com/lib/pq"
 )
 
@@ -36,9 +38,10 @@ func main() {
 	dbname := getenv("DBNAME")
 	host := getenv("HOST")
 	postgresPort := getenv("POSTGRESPORT")
-	serverPort := getenv("PORT")
 
 	fmt.Println(password)
+
+	mux := http.NewServeMux()
 
 	connStr := fmt.Sprintf("user=postgres password=%s dbname=%s host=%s port=%s sslmode=disable", password, dbname, host, postgresPort)
 	fmt.Println(connStr)
@@ -47,7 +50,7 @@ func main() {
 		fmt.Println("error")
 	}
 
-	http.HandleFunc("/create-account", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/create-account", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			fmt.Println("Not a post method")
 		}
@@ -83,7 +86,7 @@ func main() {
 
 	})
 
-	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			fmt.Println("Not a post method")
 		}
@@ -105,27 +108,36 @@ func main() {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(map[string]string{
-				"error": "user does not exists",
+				"message": "user does not exists",
 			})
 			fmt.Println("user does not exists")
 			return
 		}
 		fmt.Println("User does exist")
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "user does not exists",
+		})
 
 	})
 
-	http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			http.Error(w, "You fucked up", http.StatusMethodNotAllowed)
 			return
 		}
-
+		fmt.Println("Hello")
 	})
-	if serverPort == "" {
-		serverPort = "8080"
-	}
 
-	serverErr := http.ListenAndServe(":8080", nil)
+	handler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}).Handler(mux)
+
+	serverErr := http.ListenAndServe(":8080", handler)
 	if serverErr != nil {
 		fmt.Println(serverErr)
 	}

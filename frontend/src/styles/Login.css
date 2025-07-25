@@ -1,0 +1,12 @@
+.auth-box{
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    padding: 20px;
+    border-radius: 10px;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+
+    
+}

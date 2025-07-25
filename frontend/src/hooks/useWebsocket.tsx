@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { getToken } from "../token";
+import { aiConvo } from "../routes";
+import { getSessionId } from "../sessionId";
 
 type MessagesType = {
     role: string,
@@ -14,7 +16,8 @@ export default function useWebsocket(context: string){
     
     
     function openWs(){
-        ws.current = new WebSocket(`ws://127.0.0.1:8000/talk-to-video/${getToken()}`);
+        const id = getToken()? getToken(): getSessionId()
+        ws.current = new WebSocket(`${aiConvo}/talk-to-video/${id}`);
         ws.current.onopen  = () =>{
             console.log("ready to talk");
         }

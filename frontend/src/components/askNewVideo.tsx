@@ -1,6 +1,8 @@
 import { useState, useContext } from "react"
 import { RefreshContext } from "../contexts/RefreshContext";
 import useWebsocket from "../hooks/useWebsocket";
+import { getToken } from "../token";
+import { getSessionId } from "../sessionId";
 
 export default function AskNewVideo(){
     const [ video, setVideo ] = useState<string>("");
@@ -19,11 +21,11 @@ export default function AskNewVideo(){
 
     const sendUrl = () => {
         console.log(video);
-        
+        const id = getToken()? getToken(): getSessionId();
         fetch("http://127.0.0.1:8000/get-video-rq", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({url: video})
+            body: JSON.stringify({url: video, id: id})
         })
         .then(response=>response.json())
         .then(data=>{
@@ -43,10 +45,10 @@ export default function AskNewVideo(){
             return 
         }
         setMessage("...loading")
-        fetch("http://127.0.0.1:8000/save-url", {
+        fetch(`http://127.0.0.1:8000/save-url`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({url : video})
+            body: JSON.stringify({url : video, username: getToken()})
         })
         .then(resopnse=>resopnse.json())
         .then(data=>{
