@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 
 	_ "github.com/lib/pq"
@@ -32,7 +33,7 @@ func getenv(envName string) string {
 
 func main() {
 	fmt.Println("App is started")
-	// godotenv.Load()
+	godotenv.Load()
 	// user := getenv("USER")
 	password := getenv("PASSWORD")
 	dbname := getenv("DBNAME")
@@ -101,7 +102,7 @@ func main() {
 		queryError := conn.QueryRow(queryStr, acc.Username, acc.Password).Scan(&userExists)
 		fmt.Println(userExists)
 		if queryError != nil {
-			fmt.Println("there was an error: ", queryError)
+			fmt.Println("there was an error with querying: ", queryError)
 			return
 		}
 		if !userExists {

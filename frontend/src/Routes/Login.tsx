@@ -23,7 +23,7 @@ export default function Login(){
         .then(async(response)=>{
             if (response.status === 200 ){
                 setToken(username);
-                nav("/home")
+                nav("/")
             }
             else{
                 const data = await response.json()
@@ -43,6 +43,7 @@ export default function Login(){
                 <p>Don't have an account? <Link to="/create-account">Create One</Link></p>
                 <div className="login-buttons">
                     <button onClick={login}>Login</button>
+                    <button onClick={()=>nav("/")}>Cancel</button>
                 </div>
                 <span>{error}</span>
             </div>

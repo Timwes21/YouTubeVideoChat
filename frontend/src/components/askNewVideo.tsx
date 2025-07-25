@@ -21,6 +21,9 @@ export default function AskNewVideo(){
 
     const sendUrl = () => {
         console.log(video);
+        if (video.length === 0){
+            return
+        }
         const id = getToken()? getToken(): getSessionId();
         fetch("http://127.0.0.1:8000/get-video-rq", {
             method: "POST",
