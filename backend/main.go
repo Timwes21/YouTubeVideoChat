@@ -84,7 +84,7 @@ func main() {
 		if queryErr != nil {
 			fmt.Println("yo shit fucked", queryErr)
 		}
-
+		fmt.Println("user is created")
 	})
 
 	mux.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
@@ -100,7 +100,7 @@ func main() {
 		var userExists bool
 		queryStr := "SELECT EXISTS(SELECT 1 FROM users WHERE user_id = $1 AND password = $2)"
 		queryError := conn.QueryRow(queryStr, acc.Username, acc.Password).Scan(&userExists)
-		fmt.Println(userExists)
+		fmt.Println("users exists: ", userExists)
 		if queryError != nil {
 			fmt.Println("there was an error with querying: ", queryError)
 			return
@@ -115,11 +115,6 @@ func main() {
 			return
 		}
 		fmt.Println("User does exist")
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{
-			"message": "user does not exists",
-		})
 
 	})
 
