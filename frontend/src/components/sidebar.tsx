@@ -42,7 +42,7 @@ export default function SideBar(){
             console.log(data);
             console.log(videos);
             
-            setVideos(videos[0]);
+            setVideos(videos);
             console.log(vidoes);
             
         })

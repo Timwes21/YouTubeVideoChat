@@ -63,5 +63,7 @@
     justify-content: space-around;
     align-items: center;
     background-color: rgb(172, 172, 172);
-
+}
+.item, .tabs-header{
+    cursor: pointer;
 }

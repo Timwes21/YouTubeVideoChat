@@ -18,8 +18,7 @@ export default function useWebsocket(context: string){
     
     function openWs(){
         const id = getToken()? getToken(): getSessionId();
-        const wsLink = context === "newUrl"? `${aiConvo}/talk-to-unsaved-video/${id}` :`${aiConvo}/talk-to-video/${id}`;
-        ws.current =  new WebSocket(wsLink);
+        ws.current =  new WebSocket(`${aiConvo}/talk-to-video/${id}`);
         ws.current.onopen  = () =>{
             console.log("ready to talk");
         }
