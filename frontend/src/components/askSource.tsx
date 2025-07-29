@@ -17,7 +17,7 @@ export default function AskSource({titleContents, type}: AskType){
 
      
 
-
+    
 
     return (
         <div className="convo-source">

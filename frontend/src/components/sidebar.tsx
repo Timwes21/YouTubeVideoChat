@@ -40,10 +40,11 @@ export default function SideBar(){
         .then(data=>{
             const { videos } = data;
             console.log(data);
-            
             console.log(videos);
             
-            setVideos(videos)
+            setVideos(videos[0]);
+            console.log(vidoes);
+            
         })
     }, [refresh])
 
@@ -87,6 +88,8 @@ export default function SideBar(){
     )
 
     const chooseVideo = (video: string, type: string) => () => {
+        console.log("this shiuld be one vidoe", video);
+        
         fetch(aiInfo+"/get-knowledge-source", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -107,7 +110,9 @@ export default function SideBar(){
         window.location.reload();
     }
 
+    console.log(vidoes);
 
+    
 
     return (
         <div className="sidebar">
@@ -115,22 +120,13 @@ export default function SideBar(){
             {loggedIn?
             <ul>
                 <li onClick={()=>setKnowledgeSource(["", "", "unknown"])} className="tabs-header">Ask New Video</li>
-                {/* <li className="tabs-header" onClick={()=>setShowBases(!showBases)}>Knowledge Bases</li> */}
-                {/* {showBases && 
-                    <ul className="contents">
-                        {createBase? baseInput: <span id="save-content" onClick={()=>setCreateBase(true)}>Create a Base</span>}
-
-                        {bases.length > 0 && bases.map((value, _)=>(
-                            <p key={value} onClick={chooseVideo(value, "base")} className="item">{value}</p>      
-                        ))}
-                    </ul>
-                    } */}
+                
                 <li className="tabs-header" onClick={()=>setShowVidoes(!showVideos)}>Saved Vidoes</li>
                 {showVideos && 
                     <ul className="contents">
                         {addVideo? videoUrl: <span id="save-content" onClick={()=>setAddVideo(true)}>Save a Video</span>}
 
-                        {vidoes.map((value, _)=>(
+                        {vidoes.map(value=>(
                             <p onClick={chooseVideo(value, "videos")} className="item" key={value}>{value}</p>
                         
                         ))}

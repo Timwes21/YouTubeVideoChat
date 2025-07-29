@@ -10,7 +10,6 @@ import { aiUpdate } from './routes.ts';
 if (getToken() === "" && getSessionId() === ""){
   setSessionId();
 }
-console.log("session id: ", getSessionId());
 
 
 

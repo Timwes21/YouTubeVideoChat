@@ -15,7 +15,6 @@ function App() {
   const [ refresh, setRefesh ] = useState<boolean>(false);  
   const [ knowledgeSource, setKnowledgeSource ] = useState<string[]>(["", "", ""]);
   
-  console.log(knowledgeSource);
   
   
 
@@ -23,13 +22,13 @@ function App() {
     <>
       <BrowserRouter>
         <RefreshContext.Provider value={[refresh, setRefesh]}>
-          <KnowledgeSourceContext.Provider value={[knowledgeSource, setKnowledgeSource]}>
+        <KnowledgeSourceContext.Provider value={[knowledgeSource, setKnowledgeSource]}>
             <Routes>
               <Route path="/" element={<Home/>}/>
               <Route path="/login" element={<Login/>}/>
               <Route path="/create-account" element={<CreateAccount/>}/>
             </Routes>
-          </KnowledgeSourceContext.Provider>
+        </KnowledgeSourceContext.Provider>
         </RefreshContext.Provider>
       </BrowserRouter>
     </>
