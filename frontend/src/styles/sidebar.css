@@ -5,6 +5,8 @@
   /* top: 0; */
   background-color: grey;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 .sidebar ul{
     list-style: none;
@@ -52,4 +54,14 @@
 .contents hr{
     width: 80%;
     box-shadow: 0px 0px 10  px black;
+}
+.account{
+    margin-top: auto;
+    padding: 10px;
+    border: 2px solid black;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(172, 172, 172);
+
 }

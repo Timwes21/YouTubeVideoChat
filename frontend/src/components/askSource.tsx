@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from "react";
+import { useEffect } from "react";
 import useWebsocket from "../hooks/useWebsocket";
 
 type AskType = {
@@ -10,9 +10,9 @@ type AskType = {
 export default function AskSource({titleContents, type}: AskType){
     console.log(titleContents);
     
-const { sendQuery, query, setQuery, messagesDiv } = useWebsocket(titleContents);
+    const { sendQuery, query, setQuery, messagesDiv, handleWs } = useWebsocket(titleContents);
 
-    
+    useEffect(handleWs, [titleContents])
 
 
      

@@ -6,7 +6,7 @@ import { KnowledgeSourceContext } from "../contexts/knowledgeSource";
 
 
 export default function Home(){
-    const [ knowledgeSource, setKnowledgeSource] = useContext(KnowledgeSourceContext);
+    const [ knowledgeSource, ] = useContext(KnowledgeSourceContext);
     
     return   (
         <div className='home'>

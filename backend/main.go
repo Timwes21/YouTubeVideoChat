@@ -40,12 +40,9 @@ func main() {
 	host := getenv("HOST")
 	postgresPort := getenv("POSTGRESPORT")
 
-	fmt.Println(password)
-
 	mux := http.NewServeMux()
 
 	connStr := fmt.Sprintf("user=postgres password=%s dbname=%s host=%s port=%s sslmode=disable", password, dbname, host, postgresPort)
-	fmt.Println(connStr)
 	conn, err := sql.Open("postgres", connStr)
 	if err != nil {
 		fmt.Println("error")
@@ -106,6 +103,7 @@ func main() {
 			return
 		}
 		if !userExists {
+
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(map[string]string{

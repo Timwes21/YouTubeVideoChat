@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { getToken } from "../token";
-import { aiConvo } from "../routes";
+import { aiConvo, aiInfo } from "../routes";
 import { getSessionId } from "../sessionId";
 
 type MessagesType = {
@@ -12,12 +12,14 @@ export default function useWebsocket(context: string){
     const ws = useRef<null | WebSocket>(null);
     const [ messages, setMessages ] = useState<MessagesType[]>([]);
     const [ query, setQuery ] = useState<string>("");
+    const [ previousMessage, setPreviousMessage ] = useState<string>("");
 
     
     
     function openWs(){
-        const id = getToken()? getToken(): getSessionId()
-        ws.current = new WebSocket(`${aiConvo}/talk-to-video/${id}`);
+        const id = getToken()? getToken(): getSessionId();
+        const wsLink = context === "newUrl"? `${aiConvo}/talk-to-unsaved-video/${id}` :`${aiConvo}/talk-to-video/${id}`;
+        ws.current =  new WebSocket(wsLink);
         ws.current.onopen  = () =>{
             console.log("ready to talk");
         }
@@ -26,6 +28,10 @@ export default function useWebsocket(context: string){
         }
         ws.current.onmessage = (event) =>{
             console.log(event.data);
+            if (context === "newUrl"){
+                setPreviousMessage(event.data);
+                return;
+            }
             setMessages(prev=>[
                 ...prev,
                 {role: "ai", message: event.data}
@@ -40,19 +46,17 @@ export default function useWebsocket(context: string){
     }
 
     function getMessages(){
-        if (context !== "newUrl"){
-            fetch("http://127.0.0.1:8000/messages", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({context: context})
-            })
-            .then(response=>response.json())
-            .then(data=>{
-                console.log("this shouls be messages",data);
-                setMessages(data)
-                
-            })
-        }
+        fetch(aiInfo+"/messages", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({context: context, username: getToken()})
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            console.log("this shouls be messages", data);
+            setMessages(data);
+            
+        })
     }
     
     function closeWs(){
@@ -75,24 +79,25 @@ export default function useWebsocket(context: string){
         
     }
 
-    useEffect(()=> {
+    function handleWs(){
         openWs()
-        getMessages()
-
+        context !== "newUrl" && getMessages();
+    
         return () => {
-            closeWs()
+            closeWs();
         };
 
+    }
 
-    }, [context])
+    
 
 
     const messagesDiv = (    
         <div className="messages">
-                {messages?.map((value, index)=>(
-                    <span className={`${value.role}-message`} key={`${value.message}/${index}`} dangerouslySetInnerHTML={{__html: value.message}}></span>
-                ))}
+            {messages?.map((value, index)=>(
+                <span className={`${value.role}-message`} key={`${value.message}/${index}`} dangerouslySetInnerHTML={{__html: value.message}}></span>
+            ))}
         </div>
     )
-    return { sendQuery, query, setQuery, messagesDiv}
+    return { sendQuery, query, setQuery, messagesDiv, handleWs, previousMessage }
 }
